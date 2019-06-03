@@ -26,7 +26,7 @@ def create_tree(*args):
             open_spots.put(right_setter(root))
             continue
         
-        if len(open_spots) == 0:
+        if open_spots.qsize == 0:
             raise ValueError
         
         next_node_setter = open_spots.get()
