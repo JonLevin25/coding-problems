@@ -1,5 +1,5 @@
 import unittest
-from problem007.solution import *
+from solution.solution import *
 
 
 def test_split_success(n, count, correct_p1, correct_p2):
