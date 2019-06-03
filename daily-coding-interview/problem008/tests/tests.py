@@ -1,5 +1,5 @@
 import unittest
-from solution008.solution import *
+from problem008.solution import *
 from queue import Queue
 
 
