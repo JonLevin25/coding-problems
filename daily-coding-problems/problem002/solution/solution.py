@@ -4,7 +4,8 @@ import operator
 
 def solve(arr: List[int]):
     product = reduce(operator.mul, arr)
-    return [x / product for x in arr]
+    print("Product: " + str(product))
+    return [product / x for x in arr]
 
 def solve_without_division(arr: List[int]):
     pass

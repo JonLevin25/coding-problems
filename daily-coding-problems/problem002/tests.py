@@ -9,9 +9,12 @@ class Tests(unittest.TestCase):
     def test_regular(self):
         test(self, [1, 2, 3, 4], [24, 12, 8, 6, 2])
 
+    @unittest.skip("regular only")
     def test_edgecase_product_zero(self):
         test(self, [1], [0])
         test(self, [3, -5, -2], [10, -6, -15])
+
+    @unittest.skip("regular only")
     def test_edgecase_zero_element(self):
         test(self, [0], [0])
         test(self, [0, 1], [1, 0])
