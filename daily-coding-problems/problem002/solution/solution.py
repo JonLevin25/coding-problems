@@ -2,11 +2,15 @@ from typing import List, Iterator, Callable
 from functools import reduce
 from itertools import repeat
 
-# Get product, then divide each member of array from that product.
-# Works if you have no zeros in the array
+
 def naive_solution(arr: List[int]) -> List[int]:
+    '''Get product, then divide each member of array from that product. 
+    Works if you have no zeros in the array
+    '''
+
     product = get_product(arr)
     return [product / x for x in arr]
+
 
 def solve(arr: List[int]) -> List[int]:
     if len(arr) < 2:
@@ -29,12 +33,15 @@ def solve(arr: List[int]) -> List[int]:
     # If no zeros found
     return naive_solution(arr)
 
-# get the product for all non-0 ints in the array
+
 def get_product_ignore_zeros(arr: List[int]):
+    '''Get the product for all non-0 ints in the array'''
     return get_product((n for n in arr if n != 0))
+
 
 def get_product(arr: Iterator[int]) -> int:
     return reduce(lambda acc, n: acc * n, arr, 1)
+
 
 def list_of_zeros(count: int) -> List[int]:
     return list(repeat(0, count))
