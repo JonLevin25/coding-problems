@@ -1,6 +1,6 @@
 import unittest
 from typing import List
-from solution.solution import solve, solve_without_division
+from solution.solution import solve
 
 def test(test_object: unittest.TestCase, in_arr: List[int], expected_out: List[int]):
     test_object.assertEqual(solve(in_arr), expected_out)
