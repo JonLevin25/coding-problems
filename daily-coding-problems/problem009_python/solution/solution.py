@@ -40,13 +40,29 @@ class LargestList:
 
 # TODO: NOT PASSING. Added testcase to demonstrate
 def max_non_neighbor_sum(arr: List[int]) -> int:
-    
     # 1. get the largest 4 numbers in the array
     largest = LargestList(4)
     for i in range(len(arr)):
-        largest.tryAdd((i, arr[i]))
+        largest.tryAdd(ListItem(i, arr[i]))
+    
+    # possible sums (assuming largest = [a, b, c, d] where a is the largest, b 2nd largest etc...):
+    # a+b, a+c, b+c, a+d (b+d is irrelevant, proof omitted)
+    
+    # (if largest two values are not neighbors, they're definitely the largest.
+    if not are_neighbors(largest[0], largest[1]):
+        return largest[0].value + largest[1].value
 
-    # 2. find largest non-neighboring in largest list
+    # assume input larger than 2, because then the solution would be undefined
+    # otherwise, check all other possible pairs, filter only those that are not neighbors, return max
+    possible_pairs = [
+        (largest[0], largest[2]),  
+        (largest[1], largest[2])]
+
+    if len(arr) > 3:
+        possible_pairs.append((largest[0], largest[3]))
+
+    return max((i1.value + i2.value for (i1,i2) in possible_pairs if not are_neighbors(i1, i2)))
+
     
 
 
@@ -54,6 +70,8 @@ def max_non_neighbor_sum(arr: List[int]) -> int:
     
 
 
-def are_neighbors(idx1: int, idx2: int) -> bool:
+def are_neighbors(i1: ListItem, i2: ListItem) -> bool:
+    idx1 = i1.idx
+    idx2 = i2.idx
     return abs(idx1 - idx2) == 1
     
