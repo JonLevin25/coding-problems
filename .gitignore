@@ -1,3 +1,14 @@
+##### IDEs
+###
+# vscode
+**/.vscode/*
+**/!.vscode/settings.json
+**/!.vscode/tasks.json
+**/!.vscode/launch.json
+**/!.vscode/extensions.json
+
+# Include code-workspaces for now
+# **/*.code-workspace 
 
 ##### Python
 ###
