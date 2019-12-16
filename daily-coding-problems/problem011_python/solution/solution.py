@@ -41,9 +41,9 @@ class WordTreeNode:
         return word_node
 
     def __iter__(self):
-        for child in self.children.values():
-            yield from child.words
         yield from self.words
+        for child in self.children.values():
+            yield from child
 
 
 def build_word_tree(word_set: Set[str], split_len: int = 2) -> WordTreeNode:

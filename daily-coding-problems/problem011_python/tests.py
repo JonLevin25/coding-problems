@@ -43,10 +43,10 @@ class Tests(unittest.TestCase):
         validate_tree_node(self, deeesu_node, {'deeesus'}, set())
 
     def testAutoCompleteSimple(self):
-        results_list = list(autocomplete('de', {'dog', 'deer', 'deal'}))
+        results_list = list(autocomplete('de', {'dog', 'deer', 'deal', 'frog', 'deer', 'dealer', 'dealers', 'dealership'}))
         results_set = set(results_list)
         self.assertEqual(len(results_list), len(results_set)) # no duplicates
-        self.assertSetEqual(results_set, {'deer', 'deal'})
+        self.assertSetEqual(results_set, {'deer', 'deal', 'dealer', 'dealers', 'dealership'})
 
 if __name__ == "__main__":
     unittest.main()
