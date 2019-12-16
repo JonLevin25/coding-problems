@@ -25,9 +25,25 @@ class WordTreeNode:
         # add word to final dict
         word_node.words.add(word)
 
+    def find_node_with_prefix(self, word: str, split_len: int):
+        word_node = self
+        prefix_len = 0
+
+        # Create dependant dictionaries
+        while prefix_len + split_len <= len(word):
+            new_prefix = word[prefix_len : prefix_len + split_len]
+            prefix_len += split_len
+            
+            # add dict if doesn't exist
+            if not new_prefix in word_node.children.keys():
+                return None
+            word_node = word_node.children[new_prefix]
+        return word_node
+
     def __iter__(self):
+        for child in self.children.values():
+            yield from child.words
         yield from self.words
-        yield from (word for word in child.words for child in self.children)
 
 
 def build_word_tree(word_set: Set[str], split_len: int = 2) -> WordTreeNode:
@@ -46,15 +62,12 @@ def get_leaf_node(input_str: str):
 
 # NOTE: this is inefficient, but in real world scenario word tree would be built once
 # so I consider _autocomplete to be the real time complexity of this algorithm
-def autocomplete(inp_str: str, word_set: Set[str]):
-    word_tree = build_word_tree(word_set)
-    return _autocomplete(inp_str, word_tree)
+def autocomplete(inp_str: str, word_set: Set[str]) -> Iterator[str]:
+    split_len = 2
+    word_tree = build_word_tree(word_set, split_len)
+    return _autocomplete(inp_str, word_tree, split_len)
 
-def _autocomplete(inp_str: str, tree_root: WordTreeNode):
-    inp_len = len(inp_str)
-    curr_prefix = ""
-
-    while len(curr_prefix) <= inp_len:
-        # TODO: edge case: at root of tree, found no child relevant
-        raise NotImplementedError
-    raise NotImplementedError
+def _autocomplete(inp_str: str, tree_root: WordTreeNode, split_len: int) -> Iterator[str]:
+    result_node = tree_root.find_node_with_prefix(inp_str, split_len)
+    if result_node:
+        yield from result_node
