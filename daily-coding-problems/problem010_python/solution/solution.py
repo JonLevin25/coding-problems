@@ -2,11 +2,28 @@ from typing import Set, Iterator, List, Dict
 
 class WordTreeNode:
     words: Set[str]
-    children: Dict
+    children: Dict # Dict[str, WordTreeNode]
 
     def __init__(self, str, words: List[str] = None, children: Dict = None):
         self.words = {word for word in words} if words else set()
         self.children = children if children else dict()
+
+    def add_to_tree(self, word: str, split_len: int):
+        word_node = self
+        prefix_len = 0
+
+        # Create dependant dictionaries
+        while prefix_len + split_len <= len(word):
+            new_prefix = word[prefix_len : prefix_len + split_len]
+            prefix_len += split_len
+            
+            # add dict if doesn't exist
+            if not new_prefix in word_node.children.keys():
+                word_node.children[new_prefix] = WordTreeNode(new_prefix)
+            word_node = word_node.children[new_prefix]
+        
+        # add word to final dict
+        word_node.words.add(word)
 
     def __iter__(self):
         yield from self.words
@@ -18,21 +35,7 @@ def build_word_tree(word_set: Set[str], split_len: int = 2) -> WordTreeNode:
     # sorted_words: List[str] = sorted(word_set)
     root_node = WordTreeNode("", None, None)
     for word in word_set:
-        prefix_len = 0
-        word_node = root_node
-
-        # Create dependant dictionaries
-        while prefix_len + split_len < len(word):
-            new_prefix = word[prefix_len : prefix_len + split_len]
-            prefix_len += split_len
-            
-            # add dict if doesn't exist
-            if not new_prefix in word_node.children.keys():
-                word_node.children[new_prefix] = WordTreeNode(new_prefix)
-            word_node = word_node.children[new_prefix]
-        
-        # add word to final dict
-        word_node.words.add(word)
+        root_node.add_to_tree(word, split_len)
     
     return root_node
 
