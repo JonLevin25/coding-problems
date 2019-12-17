@@ -42,11 +42,29 @@ class Tests(unittest.TestCase):
         deeesu_node = deee_node.children['su']
         validate_tree_node(self, deeesu_node, {'deeesus'}, set())
 
-    def testAutoCompleteSimple(self):
+    def testAutoComplete(self):
         results_list = list(autocomplete('de', {'dog', 'deer', 'deal', 'frog', 'deer', 'dealer', 'dealers', 'dealership'}))
         results_set = set(results_list)
         self.assertEqual(len(results_list), len(results_set)) # no duplicates
         self.assertSetEqual(results_set, {'deer', 'deal', 'dealer', 'dealers', 'dealership'})
+
+    def testAutoComplete2(self):
+        results_list = list(autocomplete('dea', 
+        {'de', 'deb',
+         'dea', 'deaa',
+         'deal', 'deala', 'dealaa', 'dealer',
+         'deer'}))
+
+        results_set = set(results_list)
+        self.assertEqual(len(results_list), len(results_set)) # no duplicates
+        self.assertSetEqual(results_set, {'dea', 'deaa', 'deal', 'deala', 'dealaa', 'dealer'})
+
+    def testAutoCompleteMissing(self):
+        # TODO: create tree
+        # TODO: ask for word not in tree
+        # TODO: assert no words returned
+        # TODO: assert tree was not changed
+        pass
 
 if __name__ == "__main__":
     unittest.main()

@@ -25,25 +25,42 @@ class WordTreeNode:
         # add word to final dict
         word_node.words.add(word)
 
-    def find_node_with_prefix(self, word: str, split_len: int):
+    def find_words_with_prefix(self, prefix: str, split_len: int) -> Iterator[str]:
         word_node = self
         prefix_len = 0
 
-        # Create dependant dictionaries
-        while prefix_len + split_len <= len(word):
-            new_prefix = word[prefix_len : prefix_len + split_len]
+        # follow tree "path" until reach closest node to prefix.
+        while prefix_len + split_len <= len(prefix):
+            new_prefix = prefix[prefix_len : prefix_len + split_len]
             prefix_len += split_len
             
-            # add dict if doesn't exist
+            # path missing- no words exist
             if not new_prefix in word_node.children.keys():
-                return None
+                raise StopIteration
             word_node = word_node.children[new_prefix]
-        return word_node
 
-    def __iter__(self):
-        yield from self.words
-        for child in self.children.values():
+        # prefix is exactly current tree "path". Yield everything below
+        if prefix_len == len(prefix):
+            yield from self
+            raise StopIteration
+
+        # prefix is longer then current tree "path". Filter and yield
+        # filter words and yield
+        yield from (word for word in word_node if word.startswith(prefix))
+        
+        # filter children and yield
+        remaining_prefix = prefix[prefix_len:]
+        filtered_child_keys = (key for key in self.children if key.startswith(remaining_prefix))
+        filtered_children = (self.children[key] for key in filtered_child_keys)
+        for child in filtered_children:
             yield from child
+
+
+
+    def __iter__(self) -> Iterator[str]:
+        for child in self.children.values():
+            yield from child.words
+        yield from self.words
 
 
 def build_word_tree(word_set: Set[str], split_len: int = 2) -> WordTreeNode:
@@ -68,6 +85,4 @@ def autocomplete(inp_str: str, word_set: Set[str]) -> Iterator[str]:
     return _autocomplete(inp_str, word_tree, split_len)
 
 def _autocomplete(inp_str: str, tree_root: WordTreeNode, split_len: int) -> Iterator[str]:
-    result_node = tree_root.find_node_with_prefix(inp_str, split_len)
-    if result_node:
-        yield from result_node
+    yield from tree_root.find_words_with_prefix(inp_str, split_len)
