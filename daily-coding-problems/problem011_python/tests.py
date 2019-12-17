@@ -1,11 +1,12 @@
 import unittest
-from solution.solution import WordTreeNode, build_word_tree, autocomplete
+from solution.solution import WordTreeNode, build_word_tree, autocomplete, _autocomplete
 from typing import Set
+import pickle 
 
-def validate_tree_node(\
-    tester: unittest.TestCase, \
-    node: WordTreeNode, \
-    expected_words: Set[str], \
+def validate_tree_node(
+    tester: unittest.TestCase,
+    node: WordTreeNode,
+    expected_words: Set[str],
     expected_children: Set[str]):
     
     tester.assertSetEqual(node.words, expected_words)
@@ -60,11 +61,14 @@ class Tests(unittest.TestCase):
         self.assertSetEqual(results_set, {'dea', 'deaa', 'deal', 'deala', 'dealaa', 'dealer'})
 
     def testAutoCompleteMissing(self):
-        # TODO: create tree
-        # TODO: ask for word not in tree
-        # TODO: assert no words returned
-        # TODO: assert tree was not changed
-        pass
+        tree_root = build_word_tree({'te', 'what', 'tea', 'test'})
+        
+        results = _autocomplete('temp', tree_root, split_len=2)
+        self.assertEqual(len(list(results)), 0)
+
+        te_node = tree_root.children['te']
+        with self.assertRaises(KeyError):
+            te_node.children['mp']
 
 if __name__ == "__main__":
     unittest.main()

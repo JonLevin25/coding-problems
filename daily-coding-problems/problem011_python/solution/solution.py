@@ -36,13 +36,13 @@ class WordTreeNode:
             
             # path missing- no words exist
             if not new_prefix in word_node.children.keys():
-                raise StopIteration
+                return
             word_node = word_node.children[new_prefix]
 
         # prefix is exactly current tree "path". Yield everything below
         if prefix_len == len(prefix):
-            yield from self
-            raise StopIteration
+            yield from word_node
+            return
 
         # prefix is longer then current tree "path". Filter and yield
         # filter words and yield
@@ -58,9 +58,9 @@ class WordTreeNode:
 
 
     def __iter__(self) -> Iterator[str]:
-        for child in self.children.values():
-            yield from child.words
         yield from self.words
+        for child in self.children.values():
+            yield from child
 
 
 def build_word_tree(word_set: Set[str], split_len: int = 2) -> WordTreeNode:
