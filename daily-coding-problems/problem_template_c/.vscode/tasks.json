@@ -5,23 +5,31 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "msvc build",
-            "command": "cl.exe",
+            "label": "GCC Build & Run",
+            "command": "\"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
             "args": [
-                "/EHsc", 
-                "/Zi", 
-                "/Fe:", 
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "${file}"
+                
             ],
+            "dependsOn": ["gcc build active file"],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "presentation": {
-                "reveal": "always"
-            },
-            "problemMatcher": "$msCompile"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "gcc build active file",
+            "command": "gcc",
+            "args": [
+                "-g",
+                "\"${file}\"",
+                "-o",
+                "\"${fileDirname}\\${fileBasenameNoExtension}.exe\""
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
         }
     ]
 }
