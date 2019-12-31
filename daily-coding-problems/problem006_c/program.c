@@ -12,43 +12,56 @@ typedef struct XorLinkedList{
     XorLinkedNode *last;
 } XorLinkedList;
 
-void add(XorLinkedList list, int value){
+void add(XorLinkedList *list, int value){
     XorLinkedNode *newNode = malloc(sizeof(XorLinkedNode));
-    if (list.first == NULL){
-        list.first = newNode;
-        list.last = newNode;
+    newNode->value = value;
+    newNode->both = 0;
+
+    if (list->first == NULL){
+        list->first = newNode;
+        list->last = newNode;
         return;
     }
 
-    XorLinkedNode *prevNode = list.last;
-    list.last = newNode;
-    prevNode->both ^= (int)newNode; // prevNode.both should already contain previous node value, XOR it with next (newNode)
+    // Set list last ref
+    XorLinkedNode *prevNode = list->last;
+    list->last = newNode;
+
+    // Update XOR ref
+    int prevBoth = prevNode->both;
+    int newPrevBoth = prevBoth ^ (int)newNode;
+    prevNode->both = newPrevBoth; // prevNode.both should already contain previous node value, XOR it with next (newNode)
     newNode->both = (int) prevNode;
 }
 
 int get(XorLinkedList *list, int index){
     XorLinkedNode *currNode = list->first;
     XorLinkedNode *prevNode = NULL;
-    for (int i = 0; i < index; i++){ // TODO: ObO?
-        currNode = currNode->both ^ (int)prevNode;
+    for (int i = 0; i < index; i++){
+        XorLinkedNode *nextNode = (XorLinkedNode *)(currNode->both ^ (int)prevNode);
+        prevNode = currNode;
+        currNode = nextNode;
     }
 
     return currNode->value;
 }
 
-void testWithValue(XorLinkedNode node, int newValue){
-    node.value = newValue;
-}
-
-void testWithPointer(XorLinkedNode *node, int newValue){
-    node->value = newValue;
+void printVal(XorLinkedList *list, int i){
+    printf("list[%i] = %i\n", i, get(list, i));
 }
 
 int main(){
-    XorLinkedNode *node = malloc(sizeof(XorLinkedNode));
-    node->value = 1;
-    printf("%d", node->value);
-    return 0;
+    XorLinkedList *list = malloc(sizeof(XorLinkedList));
+    list->first = NULL;
+    list->last = NULL;
+
+    add(list, 10);
+    add(list, 11);
+    add(list, 12);
+
+    printVal(list, 0);
+    printVal(list, 1);
+    printVal(list, 2);
 }
 
 // TODO: extract tests to separate file + automate compilation to task in vscode
