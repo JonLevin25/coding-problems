@@ -5,7 +5,7 @@ def solve(arr: List[int]) -> int:
     # High level:
     # (1) Find min:= minimum of all *positive* numbers in array  | Time: O(n) | Space: O(1) [one variable, one iteration]
     # (2) if min > 1: return 1                                   | Time: O(1) | Space: O(1)
-    # (3) "Sort" array to form [1, 2, 3, ..., n-1]               | Time: O(n) | Space: O(1) [modify array in place, one iteration]
+    # (3) "Sort" array to form [1, 2, 3, ..., n]                 | Time: O(n) | Space: O(1) [modify array in place, one iteration]
     #     but with zeros for any number NOT found in the array (O(n))
     #     e.g. [6, 1, 2, 4, 3] will become [1, 2, 3, 4, 0]
     # (4) iterate over array, if 0 element: return index + 1     | Time: O(n) | Space: O(1)
