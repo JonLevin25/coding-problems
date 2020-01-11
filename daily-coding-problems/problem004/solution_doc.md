@@ -1,4 +1,5 @@
-Key insights:
+Key insights
+-------------
   - If the array was sorted, you could iterate over it and see where a number is missing
   
   - Since there can be at most n-1 unique numbers in the array, 
@@ -13,7 +14,8 @@ Key insights:
     This is a strong hint that you NEED O(n) space to solve this (or O(n^2) time)
     Since you have O(1) space to work with- that leads to modifying the array in-place
 
- High level Algorithm:
+High level Algorithm
+-----------------------
  1) Iterate over array, replace any numbers not in the range [1, n] with 0 in-place
  2) Modify array in-place to an array of flags, where arr[i] is non-zero only if
      the number i+1 was in the original array - explained in detail below.
@@ -21,18 +23,25 @@ Key insights:
      in example: 0 is at index 4: return 5
  4) if no 0 encountered: return array length + 1
 
+Final Complexity:
+    Time: O(n)
+    Space: O(1) (not including array modification)
+
 Examples:
-* Input: [1, 3, 4, 9, -2]
-  1)  -> [1, 3, 4, 0, 0]
-  2)  -> [1, 0, 1, 1, 0]
-  3)  -> 2
+----------
 
-* Input: [4, 0, 2, 1, 4, 9]
-  1)  -> [4, 0, 2, 1, 4, 0]
-  2)  -> [1, 2, 0, 4, 0]
-  3)  -> 3
+    0) [1, 3, 4, 9, -2] (Input)
+    1) [1, 3, 4, 0, 0]
+    2) [1, 0, 1, 1, 0]
+    3) Result: 2
 
-(2): High level mapping:
+    0) [4, 0, 2, 1, 4, 9] (Input)
+    1) [4, 0, 2, 1, 4, 0]
+    2) [1, 2, 0, 4, 0]
+    3) Result: 3
+
+Step (2) explanation:
+------------------------
  * We start with a cleaned array (only numbers between 1 and n inclusive)
  * To know whether a number is missing, we'll sort the numbers in the array, with 0 for missing numbers
  * Starting at 1 means arr[i] will correspond with the number i+1
@@ -40,9 +49,8 @@ Examples:
 Encoding:
    * if (arr[i] == 0) => i+1 is missing from the array
    * if (arr[i] == i+1) => i+1 is present in the array
-   * if (arr[i] < 0) => ONLY EXISTS DURING SORTING - negative means we found the number i+1, but needed to remember the old value at arr[i]. the old value is the positive version (arr[i] * -1)
+   * if (arr[i] < 0) =>negative means we found the number i+1, but needed to remember the old value at arr[i]. the old value is the positive version (arr[i] * -1)
+   * (Negative numbers only exist while sorting, 
+   by the end the array is gaurenteed to contain only i+1 or 0 for every i)
 
   * optimization - keep flags for the first m natural numbers, set if encountered. After | Time: O(1) | Space: O
-
- Time Complexity: O(n)
- Space Complexity: O(1)
