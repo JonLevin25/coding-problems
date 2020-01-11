@@ -14,12 +14,12 @@ Key insights:
     Since you have O(1) space to work with- that leads to modifying the array in-place
 
  High level Algorithm:
- (1) Iterate over array, replace any numbers not in the range [1, n] with 0 in-place
- (2) Modify array in-place to an array of flags, where arr[i] is non-zero only if
+ 1) Iterate over array, replace any numbers not in the range [1, n] with 0 in-place
+ 2) Modify array in-place to an array of flags, where arr[i] is non-zero only if
      the number i+1 was in the original array - explained in detail below.
- (3) iterate over array, if 0 encountered: return index + 1
+ 3) iterate over array, if 0 encountered: return index + 1
      in example: 0 is at index 4: return 5
- (4) if no 0 encountered: return array length + 1
+ 4) if no 0 encountered: return array length + 1
 
 Examples:
 * Input: [1, 3, 4, 9, -2]
