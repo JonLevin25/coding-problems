@@ -25,18 +25,22 @@ Examples:
 * Input: [1, 3, 4, 9, -2]
   1)  -> [1, 3, 4, 0, 0]
   2)  -> [1, 0, 1, 1, 0]
-  3)  -> [1, 0, 1, 1, 0] -> 2
+  3)  -> 2
+
 * Input: [4, 0, 2, 1, 4, 9]
   1)  -> [4, 0, 2, 1, 4, 0]
-  2)  -> [0, 0, 1, -1, 4, 0]
+  2)  -> [1, 2, 0, 4, 0]
+  3)  -> 3
 
 (2): High level mapping:
  * We start with a cleaned array (only numbers between 1 and n inclusive)
- * We'll map the array the following encoding for array elements:
-   * We don't care about zero- so starting with 1 means arr[i] will correspond with the number i+1
-   * if arr[i] == 0 -> i+1 is missing from the array
-   * if arr[i] == i+1 -> i+1 is present in the array
-   * if arr[i] < 0 -> that means we found the number i+1, but arr[i] wasn't zeroed out. the old value is the positive version (arr[i] * -1)
+ * To know whether a number is missing, we'll sort the numbers in the array, with 0 for missing numbers
+ * Starting at 1 means arr[i] will correspond with the number i+1
+
+Encoding:
+   * if (arr[i] == 0) => i+1 is missing from the array
+   * if (arr[i] == i+1) => i+1 is present in the array
+   * if (arr[i] < 0) => ONLY EXISTS DURING SORTING - negative means we found the number i+1, but needed to remember the old value at arr[i]. the old value is the positive version (arr[i] * -1)
 
   * optimization - keep flags for the first m natural numbers, set if encountered. After | Time: O(1) | Space: O
 

@@ -1,19 +1,26 @@
 from typing import List
 
-def solve(arr: List[int]) -> int:
+def solve(arr: List[int], debug: bool = False) -> int:
     ''' see solution_doc.md for algorithm description '''
     n = len(arr)
 
-    print(f"0) Solve: input: {arr}")
+    if debug: print(f"0) Solve: input: {arr}")
+    
     # (1) Clean array
     for i in range(n):
+    """ Possible optimization: in certain scenarios you might want to keep a flag for whether 1 was found here, 
+    and if not return 1 without running step (2). You could technically keep m flags
+    for the first m natural numbers, but you get diminishing returns for each flag added
+    """
         if arr[i] < 0 or arr[i] > n:
             arr[i] = 0
-    print(f"1) Solve: cleaned: {arr}")
+    
+    if debug: print(f"1) Solve: cleaned: {arr}")
 
     # (2) map array
     map_array(arr, n)
-    print(f"2) Solve: mapped: {arr}")
+    
+    if debug: print(f"2) Solve: mapped: {arr}")
 
     # (3)
     for i in range(len(arr)):
@@ -22,7 +29,7 @@ def solve(arr: List[int]) -> int:
             return i + 1
     
     # (4)
-    print(f"4) Solve: finished: {i+1}")
+    if debug: print(f"4) Solve: finished: {i+1}")
     return len(arr) + 1
 
 def map_array(cleaned_arr, n):
