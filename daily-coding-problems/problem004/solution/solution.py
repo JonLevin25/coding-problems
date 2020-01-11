@@ -1,58 +1,67 @@
 from typing import List
-from functools import reduce
 
 def solve(arr: List[int]) -> int:
-    # High level:
-    # (1) Find min:= minimum of all *positive* numbers in array  | Time: O(n) | Space: O(1) [one variable, one iteration]
-    # (2) if min > 1: return 1                                   | Time: O(1) | Space: O(1)
-    # (3) "Sort" array to form [1, 2, 3, ..., n]                 | Time: O(n) | Space: O(1) [modify array in place, one iteration]
-    #     but with zeros for any number NOT found in the array (O(n))
-    #     e.g. [6, 1, 2, 4, 3] will become [1, 2, 3, 4, 0]
-    # (4) iterate over array, if 0 element: return index + 1     | Time: O(n) | Space: O(1)
-    #     in example: 0 is at index 4: return 5
-    # (5) if no 0 encountered: return array length + 1           | Time: O(1) | Space: O(1)
-    #
-    # Time Complexity: O(n)
-    # Space Complexity: O(1)
+    ''' see solution_doc.md for algorithm description '''
+    n = len(arr)
 
-    # (1)
-    min_positive = reduce(lambda min, x: x if pos(x) and x < min else min, arr, len(arr) + 1)
+    print(f"0) Solve: input: {arr}")
+    # (1) Clean array
+    for i in range(n):
+        if arr[i] < 0 or arr[i] > n:
+            arr[i] = 0
+    print(f"1) Solve: cleaned: {arr}")
 
-    # (2)
-    if min_positive > 1:
-        return 1
+    # (2) map array
+    map_array(arr, n)
+    print(f"2) Solve: mapped: {arr}")
 
     # (3)
-    sortof_sort_array(arr, min_positive)
-
-    # (4)
     for i in range(len(arr)):
-        if arr[i] == 0: return i + 1
+        if arr[i] == 0: 
+            print(f"3) Solve: found: {i+1}")
+            return i + 1
     
-    # (5)
+    # (4)
+    print(f"4) Solve: finished: {i+1}")
     return len(arr) + 1
 
-# TODO: this doesn't work since I'm modifying elements of the array I haven't accessed yet. (So I never actually process them)
-# TODO: try to find solution to this problem within constraints
-def sortof_sort_array(arr: List[int], min_positive: int):
-    def idx_in_range(i):
-        return i >= 0 and i < len(arr)
+def map_array(cleaned_arr, n):
+    for i in range(n):
+        x = cleaned_arr[i]
+        expected = i+1
 
-    for i in range(len(arr)):
-        val = arr[i]
+        if x == 0:
+            continue
 
-        # check if this index was already "sorted"
-        # if it isn't- set it as "missing" (0 value)
-        curr_idx_sorted = val == i + 1
-        if (not curr_idx_sorted):
-            arr[i] = 0
+        # If negative, <expected> was found previously in the array.
+        # Extract previous value and set element to final expected value
+        if x < 0:
+            x *= -1
+            cleaned_arr[i] = expected
+        else:
+            # if i+1 value wasn't previously found and it's not a fixed point, set 0
+            cleaned_arr[i] = 0
 
-        # sort the value found to it's "correct" index, if within bounds
-        target_idx = val - 1
-        if idx_in_range(target_idx):
-            arr[target_idx] = val
+        # We have what we came for - set and continue
+        if x == expected:
+            cleaned_arr[i] = expected
+            continue
+        
+        target_idx = x-1
+        other_x = cleaned_arr[target_idx]
 
+        # if we're "going back" - then <target_idx> has already been handled
+        # and is either 0 or the target number. Overwrite in both cases
+        if target_idx < i:
+            cleaned_arr[target_idx] = x
+            continue
 
-def pos(x): return x > 0
+        # if set to negative - x has already been found, continue
+        elif other_x < 0:
+            continue
 
-    
+        # if x hasn't been found yet, encode it into arr[target_idx]
+        if other_x == 0:
+            cleaned_arr[target_idx] = x
+        else:
+            cleaned_arr[target_idx] = -other_x
