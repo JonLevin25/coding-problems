@@ -1,19 +1,35 @@
 #ifndef DATA_STRUCTURES_H
 #define DATA_STRUCTURES_H
 
-typedef struct NodeLetterCount
+typedef struct LetterCount
 {
     char c;
     int count;
 
-    struct NodeLetterCount* prev;
-    struct NodeLetterCount* next;
-} NodeLetterCount;
+    struct LetterCount* prev;
+    struct LetterCount* next;
+} LetterCount;
 
-typedef struct Node
+typedef struct UniqueLetterList
 {
-    NodeLetterCount* firstLetterCount;
-} Node;
+    LetterCount* firstLetterCount;
+    LetterCount* lastLetterCount;
+    int uniqueLetters;
+    
+    UniqueLetterList* next;
+    UniqueLetterList* prev;
+} UniqueLetterList;
 
-void HelloFromData();
+typedef struct LinkedListNode {
+    LinkedListNode* prev;
+    LinkedListNode* next;
+    void* value;
+} LinkedListNode;
+
+UniqueLetterList* NewNode(char c);
+
+void AddLetter(UniqueLetterList* n, char c);
+
+char* UniqueLetterListToString(UniqueLetterList n);
+
 #endif
